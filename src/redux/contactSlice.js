@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -9,29 +9,32 @@ const initialData = {
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ],
-  filter: ""
-}
+  filter: '',
+};
 
 const contactSlice = createSlice({
   name: 'dataState',
   initialState: initialData,
   reducers: {
     addContact(state, action) {
-      state.contacts.push(action.payload)
+      state.contacts.push(action.payload);
     },
-    decrement(state) {
-      state.value--
+    deleteContact(state, action) {
+      const index = state.contacts.findIndex(
+        contact => contact.id === action.payload
+      );
+      state.contacts.splice(index, 1);
     },
-    incrementByAmount(state, action) {
-      state.value += action.payload
+    getFilter(state, action) {
+      state.filter = action.payload;
     },
   },
-})
+});
 
 const persistConfig = {
   key: 'Contacts',
   storage,
-  whitelist: ['contacts', 'filter']
+  whitelist: ['contacts', 'filter'],
 };
 
 export const contactReducer = persistReducer(
@@ -39,4 +42,4 @@ export const contactReducer = persistReducer(
   contactSlice.reducer
 );
 
-export const { addContact } = contactSlice.actions
+export const { addContact, deleteContact, getFilter } = contactSlice.actions;
